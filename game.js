@@ -37,12 +37,15 @@ const checkAnswer = (currentLevel) => {
     playSound('wrong');
 
     console.log('wrong');
-    $("body").addClass("game-over");
+    $('body').addClass('game-over');
     setTimeout(() => {
-      $("body").removeClass("game-over");
+      $('body').removeClass('game-over');
     }, 200);
+    $('#level-title').text('Game Over, Press Any Key to Restart');
+    
+    // Call startOver() if the user gets the sequence wrong.
+    startOver();
   }
-  $('#level-title').text("Game Over, Press Any Key to Restart");
 };
 
 const nextSequence = () => {
@@ -79,3 +82,10 @@ const animatePress = (currentColour) => {
   }, 100);
 };
 
+const startOver = () => {
+  // reset values
+
+  level = 0;
+  gamePattern = [];
+  started = false;
+};
