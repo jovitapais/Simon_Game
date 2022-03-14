@@ -34,8 +34,15 @@ const checkAnswer = (currentLevel) => {
       }, 1000);
     }
   } else {
+    playSound('wrong');
+
     console.log('wrong');
+    $("body").addClass("game-over");
+    setTimeout(() => {
+      $("body").removeClass("game-over");
+    }, 200);
   }
+  $('#level-title').text("Game Over, Press Any Key to Restart");
 };
 
 const nextSequence = () => {
@@ -71,3 +78,4 @@ const animatePress = (currentColour) => {
     $(`#${currentColour}`).removeClass('pressed');
   }, 100);
 };
+
