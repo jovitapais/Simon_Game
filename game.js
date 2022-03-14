@@ -1,21 +1,53 @@
 const buttonColours = ['red', 'blue', 'green', 'yellow'];
-const gamePattern = [];
-const userClickedPattern = [];
+let gamePattern = [];
+let userClickedPattern = [];
+
+let started = false;
+let level = 0;
+$(document).keypress(() => {
+  if (!started) {
+    $('#level-title').text(`Level  ${level}`);
+    nextSequence();
+    started = true;
+  }
+});
 
 $('.btn').click((e) => {
   const userChosenColour = e.target.id;
   userClickedPattern.push(userChosenColour);
+
   playSound(userChosenColour);
   animatePress(userChosenColour);
+
+  // Call checkAnswer() after a user has clicked and chosen their answer,
+  // passing in the index of the last answer in the user's sequence.
+  checkAnswer(userClickedPattern.length - 1);
 });
 
-const nextSequence = () => {
+const checkAnswer = (currentLevel) => {
+  if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+    console.log('success');
 
-  //Inside nextSequence(), increase the level by 1 every time nextSequence() is called.
+    if (userClickedPattern.length === gamePattern.length) {
+      setTimeout(() => {
+        nextSequence();
+      }, 1000);
+    }
+  } else {
+    console.log('wrong');
+  }
+};
+
+const nextSequence = () => {
+  // Once nextSequence() is triggered, reset the userClickedPattern
+  // to an empty array ready for the next level.
+
+  userClickedPattern = [];
+  // Inside nextSequence(), increase the level by 1 every time nextSequence() is called.
   level++;
 
- // Inside nextSequence(), update the h1 with this change in the value of level.
-  $("#level-title").text("Level " + level);
+  // Inside nextSequence(), update the h1 with this change in the value of level.
+  $('#level-title').text(`Level ${level}`);
 
   const randomNumber = Math.floor(Math.random() * 4);
   const randomChosenColour = buttonColours[randomNumber];
@@ -39,13 +71,3 @@ const animatePress = (currentColour) => {
     $(`#${currentColour}`).removeClass('pressed');
   }, 100);
 };
-
-let started = false;
-const level = 0;
-$(document).keypress(() => {
-  if (!started) {
-    $('#level-title').text(`Level  ${level}`);
-    nextSequence();
-    started = true;
-  }
-});
